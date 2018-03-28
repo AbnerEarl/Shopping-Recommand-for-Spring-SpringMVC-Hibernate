@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Movie Recommend</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Loading Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<!-- <link href="css/jquery-ui.css" rel="stylesheet"> -->
+
+
+<!-- Loading Flat UI -->
+<link href="css/flat-ui.css" rel="stylesheet">
+
+<link rel="shortcut icon" href="../../dist/img/favicon.ico">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+<!--[if lt IE 9]>
+      <script src="../../dist/js/vendor/html5shiv.js"></script>
+      <script src="../../dist/js/vendor/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<style>
+body {
+	min-height: 200px;
+	padding-top: 70px;
+}
+</style>
+
+	<!-- Static navbar -->
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+				</button>
+				<a class="navbar-brand">在线Saprk ALS电影推荐系统</a>
+			</div>
+			<!--   <div class="navbar-collapse collapse"> -->
+			<!--  <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../navbar/">Default</a></li>
+            <li class="active"><a href="./">Static top</a></li>
+            <li><a href="../navbar-fixed-top/">Fixed top</a></li>
+          </ul> -->
+			<!-- </div> -->
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+
+
+	<div class="container">
+
+		<!-- Main component for a primary marketing message or call to action -->
+		<div class="tabbable">
+			<!-- Only required for left/right tabs -->
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#tab1" data-toggle="tab">简介</a></li>
+				<li><a href="#tab2" data-toggle="tab">建模</a></li>
+				<li ><a href="#tab3" data-toggle="tab">推荐</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab1">
+					<!-- 系统简介 -->
+					<br>
+					<p>在线Saprk ALS电影推荐系统：使用Spark MLlib中的ALS算法对ratings.dat文件进行建模
+						，建模后，读取模型user、product features数据来对用户进行推荐。 本版包含功能：
+					<li>1）建立ALS推荐模型；</li>
+					<li>2）在线推荐；</li> 存在问题：
+					<!-- <li>1）用户推荐页面的查询，查询的用户对已经评价过的电影的评分数据获取异常；</li> -->
+					<li>1）推荐只能针对存在的用户推荐，不能采用匿名推荐（新用户推荐）；</li>
+					</p>
+				</div>
+				<div class="tab-pane" id="tab2">
+					<br>
+					<div class="row">
+						<div class="col-md-8 col-md-offset-1">
+							<p>输入或选择参数，提交Spark任务，进行建模：</p>
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<label for="inputEmail1" class="col-lg-2 control-label">输入路径：</label>
+									<div class="col-lg-10">
+										<input type="text" class="form-control" id="input_id"
+											value="hdfs://master:8020/user/root/ratings.dat"
+											placeholder="hdfs://master:8020/ratings.dat">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-2 control-label">训练比重：</label>
+									<div class="col-lg-10">
+										<select id="train_percent" class=" form-control">
+											<option value="0.9">90%</option>
+											<option value="0.8">80%</option>
+											<option value="0.7">70%</option>
+											<option value="0.6">60%</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-2 control-label">矩阵分解秩：</label>
+									<div class="col-lg-10">
+										<select id="ranks" class=" form-control">
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-2 control-label">正则系数：</label>
+									<div class="col-lg-10">
+										<select id="lambda" class=" form-control">
+											<option value="0.1">0.1</option>
+											<option value="0.2">0.2</option>
+											<option value="0.5">0.5</option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="5">5</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-2 control-label">循环次数：</label>
+									<div class="col-lg-10">
+										<select id="iterations" class=" form-control">
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="20">20</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-lg-offset-2 col-lg-10">
+										<input id="train_model" class="btn btn-default" type="button"
+											value="建模">
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="modal fade" id="myModal1" tabindex="-1" role="dialog"
+							aria-labelledby="myModalLabel">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="progress progress-striped active"
+										style="margin-bottom: 0px; height: 25px; border-radius: 5px;">
+										<div id="progressId" class="progress-bar"
+											style="width: 1%; height: 100%;">0%</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- modal fade  -->
+						<div class="modal fade" id="myModal2" tabindex="-1" role="dialog"
+							aria-labelledby="myModalLabel2">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="alert alert-warning" style="margin-bottom: 0px;">
+										<a href="#" onclick="closeModal('myModal2')" class="close">
+											&times; </a>
+										<div id="tipId">模型训练完成！</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<!-- modal fade  -->
+						<!-- /.col-md-8 -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<div class="tab-pane " id="tab3">
+					<br>
+					<div class="row">
+						<div class="col-md-8 col-md-offset-1">
+							<p>输入用户id，进行推荐或查询用户看过的电影</p>
+							<div class="form-group">
+								<label for="inputEmail1" class="col-lg-2 control-label">用户ID：</label>
+								<div class="col-lg-2">
+									<input type="text" class="form-control" id="userId" value="1"
+										placeholder="1">
+								</div>
+								<div class="col-lg-2">
+									<input type="button" class="btn btn-default " id="checkId"
+										value="查询">
+								</div>
+								<label for="inputEmail1" class="col-lg-2 control-label">推荐个数：</label>
+								<div class="col-lg-2">
+									<select id="recommendNumId" class=" form-control">
+											<option value="10">10</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="11">11</option>
+											<option value="20">20</option>
+										</select>
+								</div>
+								<div class="col-lg-2">
+									<input type="button" class="btn btn-default" id="recommendId"
+										value="推荐">
+								</div>
+
+							</div>
+
+						</div>
+						<!-- col-md-8  -->
+						<div class="col-md-10 col-md-offset-1" id="movieResultId">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- /container -->
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="js/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<!-- <script src="js/jquery-ui.js"></script> -->
+	<script src="js/flat-ui.js"></script>
+	<script src="js/als.js"></script>
+</body>
+</html>
